@@ -1,0 +1,320 @@
+/* Load after refresh.css on every page. */
+body { position: relative; isolation: isolate; }
+body::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  pointer-events: none; opacity: .015;
+  background: #5487ba url('../assets/images/navy-texture.png') center top / 736px auto repeat;
+  background-blend-mode: multiply;
+}
+body.has-sunset::before {
+  -webkit-mask-image: linear-gradient(to bottom, #000 0,
+    #000 calc(var(--sunset-top) - 140px), transparent var(--sunset-top),
+    transparent var(--sunset-bottom), #000 calc(var(--sunset-bottom) + 140px));
+  mask-image: linear-gradient(to bottom, #000 0,
+    #000 calc(var(--sunset-top) - 140px), transparent var(--sunset-top),
+    transparent var(--sunset-bottom), #000 calc(var(--sunset-bottom) + 140px));
+}
+.contact-section { background-color: var(--bg); }
+
+/* Zoom inside a stationary feathered frame, so the image edges stay hidden. */
+.hero-photo.hero-static {
+  overflow: hidden; padding: 0; background: transparent;
+  -webkit-mask-image: radial-gradient(ellipse 52% 64% at center, #000 35%, #000b 62%, transparent 96%), linear-gradient(to bottom, transparent, #000 20%, #000 80%, transparent) !important;
+  mask-image: radial-gradient(ellipse 52% 64% at center, #000 35%, #000b 62%, transparent 96%), linear-gradient(to bottom, transparent, #000 20%, #000 80%, transparent) !important;
+  -webkit-mask-composite: source-in !important; mask-composite: intersect !important;
+}
+.hero-photo.hero-static img {
+  -webkit-mask: none !important; mask: none !important;
+  transform: scale(1.18); transform-origin: 50% 60%;
+}
+.whatsapp-float { width: 56px; height: 56px; padding: 14px; justify-content: center; }
+.whatsapp-float span { display: none; }
+
+/* Same column sizes as the contact area: right edges line up. */
+.site-footer { grid-template-columns: .9fr 1.1fr; column-gap: 70px; }
+.site-footer nav { justify-content: flex-end; text-align: right; }
+.site-footer nav::after {
+  flex-basis: 100%; width: 100%; margin: 18px auto 0;
+  background-position: center; background-size: auto 100%;
+}
+
+.reviews-section { padding-block: 90px; }
+.reviews-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: start; }
+.review-form, .review-card, .reviews-empty {
+  background: linear-gradient(140deg, #111f2de8, #09121be8);
+  border: 1px solid #344d68; border-radius: 14px; padding: 28px;
+}
+.review-form .field { margin-bottom: 18px; }
+.review-form input, .review-form select, .review-form textarea {
+  width: 100%; min-width: 0; padding: 12px; color: #f4f7fc;
+  background: #080f19; border: 1px solid #3c536e; border-radius: 7px;
+}
+.review-form label { display: block; margin-bottom: 7px; }
+.review-form .review-consent { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; }
+.review-consent input { width: 18px; min-width: 18px; margin-top: 4px; accent-color: var(--brand-blue); }
+.review-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.review-actions .button { flex: 1; justify-content: center; }
+.review-note, .review-status { font-size: 13px; color: #b8c9dd; }
+.approved-reviews { display: grid; gap: 18px; }
+.review-card blockquote { margin: 14px 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.review-stars { color: #64acff; letter-spacing: .15em; }
+.review-card p { margin: 8px 0; }
+.review-copy { margin-top: 18px; }
+.review-copy textarea { width: 100%; }
+@media(max-width:1000px) { .site-footer { column-gap: 30px; } }
+@media(max-width:760px) {
+  .site-footer, .reviews-layout { grid-template-columns: 1fr; }
+  .site-footer nav { justify-content: center; text-align: center; }
+  .review-form, .review-card, .reviews-empty { padding: 22px; }
+  .reviews-section { padding-block: 60px; }
+}
+#reviews-empty { display: none !important; }
+.review-demo-label { color: #9bbde9; font-size: 12px; letter-spacing: .06em; }
+.approved-reviews.review-stack { display: block; position: relative; perspective: 1200px; margin-bottom: 34px; }
+.review-stack .review-card {
+  position: absolute; inset: 0 0 auto; width: 100%;
+  min-height: 260px; backface-visibility: hidden; transform-origin: left center;
+  background: linear-gradient(140deg, #172a3c, #09131f);
+  box-shadow: 0 12px 35px #0004;
+}
+.review-stack .review-card blockquote { font-size: 19px; line-height: 1.65; }
+.review-stack .review-card.is-front { z-index: 3; transform: none; opacity: 1; }
+.review-stack .review-card.is-next { z-index: 2; transform: translateY(11px) scale(.97); opacity: .8; }
+.review-stack .review-card.is-back { z-index: 1; transform: translateY(22px) scale(.94); opacity: .45; }
+.review-stack .review-card.is-away { visibility: hidden; }
+.review-stack-controls { display: flex; align-items: center; gap: 18px; margin-bottom: 24px; }
+.review-stack-controls button {
+  border: 1px solid #3b5d84; border-radius: 8px; padding: 10px 16px;
+  background: #101f31; color: #dceaff; cursor: pointer;
+}
+.review-stack-controls span { font-size: 13px; color: #b5c7df; }
+.site-footer { position: relative; grid-template-columns: .9fr 1.1fr; column-gap: 70px; }
+.site-footer nav { justify-content: flex-end; grid-column: 2; grid-row: 1; }
+.site-footer nav::after {
+  position: absolute; left: 50%; top: 115px; transform: translateX(-50%);
+  width: 240px; height: 125px; background-position: center center;
+  margin: 0; background-size: contain;
+}
+.site-footer .credits { margin-top: 55px; }
+@media(max-width:1000px) { .site-footer { column-gap: 30px; } }
+@media(max-width:760px) {
+  .site-footer { grid-template-columns: 1fr; }
+  .site-footer nav { grid-column: 1; grid-row: 2; }
+  .site-footer nav::after { position: static; transform: none; width: 100%; margin-top: 18px; }
+  .site-footer .credits { margin-top: 8px; }
+  .review-stack .review-card blockquote { font-size: 17px; }
+}
+/* Cards align exactly; the stack extends downward only. */
+.approved-reviews.review-stack {
+  perspective: 1200px;
+  margin-bottom: 32px;
+}
+
+.review-stack .review-card {
+  left: 0;
+  right: 0;
+  width: 100%;
+  transform-origin: center top;
+}
+
+.review-stack .review-card.is-front {
+  transform: translateY(0);
+  z-index: 3;
+  opacity: 1;
+}
+
+.review-stack .review-card.is-next {
+  transform: translateY(11px);
+  z-index: 2;
+  opacity: .8;
+}
+
+.review-stack .review-card.is-back {
+  transform: translateY(22px);
+  z-index: 1;
+  opacity: .45;
+}
+
+.review-stack .review-card.is-away {
+  visibility: hidden;
+}
+
+.review-stack-controls,
+.review-demo-label {
+  display: none !important;
+}
+
+/* Show all reviews without animation for reduced motion. */
+.review-stack.is-static {
+  height: auto !important;
+}
+
+.review-stack.is-static .review-card {
+  position: relative;
+  inset: auto;
+  transform: none;
+  visibility: visible;
+  opacity: 1;
+  margin-bottom: 18px;
+}
+
+/* Space between the services divider and Our fleet. */
+#fleet {
+  padding-top: 60px;
+}
+
+/* Contact heading and details above the enquiry form. */
+.contact-form-grid {
+  display: grid;
+  grid-template-columns: .9fr 1.1fr;
+  column-gap: 70px;
+  row-gap: 36px;
+  align-items: start;
+}
+
+.contact-form-grid > .contact-intro {
+  grid-column: 1 / -1;
+  grid-row: 1;
+}
+
+.contact-intro h2 {
+  max-width: none;
+}
+
+.contact-intro > p:not(.eyebrow) {
+  max-width: none;
+}
+
+.contact-direct {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 12px 32px;
+  margin-top: 24px;
+}
+
+.contact-form-grid > .contact-form {
+  grid-column: 2;
+  grid-row: 2;
+  width: 100%;
+}
+
+/* Match the contact form's right edge in the footer. */
+.site-footer {
+  grid-template-columns: .9fr 1.1fr;
+  column-gap: 70px;
+}
+
+@media (max-width: 1000px) {
+  .contact-form-grid,
+  .site-footer {
+    column-gap: 30px;
+  }
+}
+
+@media (max-width: 760px) {
+  #fleet {
+    padding-top: 40px;
+  }
+
+  .contact-form-grid,
+  .site-footer {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-form-grid > .contact-form {
+    grid-column: 1;
+  }
+
+  .contact-direct {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+.site-footer .footer-contact {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.site-footer .footer-contact a {
+  display: inline-block;
+  margin: 0;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.site-footer .footer-contact a:hover,
+.site-footer .footer-contact a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.site-footer .footer-contact + .footer-location {
+  margin-top: 18px;
+}
+/* Intro: 1.5 seconds total */
+.logo-intro:not([hidden]) {
+  animation: intro-fast 1.5s ease both !important;
+}
+
+.logo-intro img {
+  animation: intro-mark .35s ease-out both !important;
+}
+
+@keyframes intro-fast {
+  0%, 65% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Hero: quick entrance without staggered delays */
+.hero.hero-enter .hero-copy > *,
+.hero.hero-enter .hero-photo {
+  animation-duration: .28s !important;
+  animation-delay: 0s !important;
+}
+.review-stack .review-card {
+  transform-origin: center top;
+  transition: none !important;
+}
+.site-footer .credits {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.agency-credit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.stellar-footer-logo {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 54px;
+  height: 32px;
+  background-color: #fff;
+
+  /* Show the white artwork; hide the black background. */
+  -webkit-mask-image:
+    url("../assets/images/stellar-works-original.png");
+  mask-image:
+    url("../assets/images/stellar-works-original.png");
+
+  mask-mode: luminance;
+
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+
+  /* Exclude the original image's large outer margins. */
+  -webkit-mask-size: 135% auto;
+  mask-size: 135% auto;
+
+  -webkit-mask-position: center 44%;
+  mask-position: center 44%;
+}

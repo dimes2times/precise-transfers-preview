@@ -247,6 +247,17 @@ function emailDraft(form, isBooking) {
     lines.push(`Name: ${val('name')}`, `Email: ${val('email')}`);
     if (val('phone')) lines.push(`Phone: ${val('phone')}`);
     lines.push('', val('notes'));
+    if (isBooking) {
+  lines.push(
+    "",
+    `Vehicle preference: ${val("vehicleChoice")}`,
+    `SUV quantity: ${val("suvQuantity") || "To be quoted"}`
+  );
+
+  if (val("invoiceSummary")) {
+    lines.push("", val("invoiceSummary"));
+  }
+}
     if (isBooking) lines.push('', 'I have read the booking policies and understand this is a request, not a confirmed booking.');
     copyField.value = lines.join('\n');
     fallback.hidden = false;
@@ -269,7 +280,9 @@ for (const form of document.querySelectorAll('#request-form, #contact-form')) {
     const part = key => parts.find(p => p.type === key).value;
     form.elements.namedItem('date').min = `${part('year')}-${part('month')}-${part('day')}`;
   }
-  emailDraft(form, form.id === 'request-form');
+  if (form.id === "contact-form") {
+  emailDraft(form, false);
+}
 }
 
 document.querySelectorAll('#services, #fleet, .about-gallery-section').forEach(el => el.classList.add('section-divider'));

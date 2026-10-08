@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+
+  <title>Your Quote | Precise Transfers</title>
+
+  <link rel="icon"
+        href="assets/images/pt-favicon.png">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/mockup.css">
+  <link rel="stylesheet" href="css/refresh.css">
+  <link rel="stylesheet" href="css/site-additions.css">
+
+  <script src="js/quote.js" defer></script>
+</head>
+
+<body class="quote-page">
+  <header class="quote-page-header container">
+    <a class="brand" href="index.html"
+       aria-label="Precise Transfers home">
+      <img class="pt-mark"
+           src="assets/images/pt-monogram.png"
+           alt="" width="64" height="64">
+
+      <span class="brand-wordmark">
+        <span class="metal-silver">Precise</span>
+        <span class="metal-blue">Transfers</span>
+      </span>
+    </a>
+  </header>
+
+  <main class="container quote-page-main">
+    <p class="eyebrow">Review your journey</p>
+    <h1>Your transfer quote.</h1>
+
+    <section id="quote-unavailable">
+      <p>
+        Please complete your booking details to create a quote.
+      </p>
+      <a class="button" href="booking.html">
+        Go to booking
+      </a>
+    </section>
+
+    <section id="quote-content" hidden>
+      <div class="quote-page-card">
+        <p class="invoice-status">
+          Unpaid · Vehicle availability pending
+        </p>
+
+        <pre id="quote-details"></pre>
+
+        <div class="quote-total-row">
+          <span>Total</span>
+          <strong id="quote-total"></strong>
+        </div>
+
+        <p class="muted">
+          All prices are USD. No additional taxes or fees.
+        </p>
+
+        <label class="check">
+          <input id="quote-accepted" type="checkbox">
+          <span>
+            I have reviewed my trip details, vehicle quantity
+            and total, and accept this quote.
+          </span>
+        </label>
+
+        <div id="quote-payment" hidden>
+          <button class="button" type="button" disabled>
+            Continue to payment
+          </button>
+
+          <p class="muted" role="status">
+            Online payment is not connected yet.
+            No payment has been taken.
+          </p>
+        </div>
+
+        <p class="muted">
+          Accepting this quote does not confirm your booking.
+          Availability and payment must be verified first.
+        </p>
+      </div>
+
+      <button id="quote-back"
+              class="secondary-button" type="button">
+        Back to booking
+      </button>
+    </section>
+  </main>
+
+  <footer class="container quote-page-footer">
+    <p>Precise Transfers · Turks &amp; Caicos Islands</p>
+  </footer>
+</body>
+</html>

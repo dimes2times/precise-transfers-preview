@@ -11,7 +11,7 @@
   <meta name="description" content="Locally owned luxury transportation and concierge services based in Providenciales, Turks & Caicos. Request an airport or local transfer with Precise Transfers.">
   <meta name="theme-color" content="#080b10">
   <title>Request a Transfer | Precise Transfers</title>
-    <link rel="stylesheet" href="css/styles.css"><link rel="stylesheet" href="css/mockup.css"><link rel="stylesheet" href="css/refresh.css"><link rel="stylesheet" href="css/site-additions.css?v=2"><script src="js/main.js" defer></script><script src="js/approved-reviews.js" defer></script><script src="js/dropdowns.js?v=2" defer></script>
+    <link rel="stylesheet" href="css/styles.css"><link rel="stylesheet" href="css/mockup.css"><link rel="stylesheet" href="css/refresh.css"><link rel="stylesheet" href="css/site-additions.css?v=2"><script src="js/main.js" defer></script><script src="js/approved-reviews.js" defer></script><script src="js/dropdowns.js?v=2" defer></script><script src="js/booking-invoice.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -39,16 +39,127 @@
         <div class="form-pair"><div class="field"><label for="travel-date">Pickup date</label><input id="travel-date" name="date" type="date" required></div><div class="field"><label for="travel-time">Pickup time (Turks &amp; Caicos)</label><input id="travel-time" name="time" type="time" required></div></div>
         <div class="field"><label for="pickup">Pickup location</label><input id="pickup" name="pickup" autocomplete="off" required maxlength="200"></div>
         <div class="field"><label for="dropoff">Drop-off location</label><input id="dropoff" name="dropoff" autocomplete="off" required maxlength="200"></div>
-        <div class="form-pair"><div class="field"><label for="passengers">Passengers</label><input id="passengers" name="passengers" type="number" min="1" step="1" required></div><div class="field"><label for="luggage">Luggage details</label><input id="luggage" name="luggage" placeholder="e.g. 3 suitcases, 2 carry-ons" required maxlength="150"></div></div>
+        <div class="form-pair">
+  <div class="field">
+    <label for="passengers">Passengers</label>
+    <input id="passengers" name="passengers"
+           type="number" min="1" step="1" required>
+  </div>
+
+  <div class="field">
+    <label for="checked-bags">Checked bags</label>
+    <input id="checked-bags" name="checkedBags"
+           type="number" min="0" step="1" required>
+  </div>
+</div>
+
+<div class="form-pair">
+  <div class="field">
+    <label for="carry-on-bags">Carry-on bags</label>
+    <input id="carry-on-bags" name="carryOnBags"
+           type="number" min="0" step="1" required>
+  </div>
+
+  <div class="field">
+    <label for="vehicle-choice">Vehicle preference</label>
+    <select id="vehicle-choice" name="vehicleChoice" required>
+      <option value="">Choose vehicles</option>
+      <option value="recommend">Recommend vehicles for me</option>
+      <option value="suv">SUVs</option>
+      <option value="van">Passenger van — request a quote</option>
+      <option value="mixed">SUVs + van — request a quote</option>
+    </select>
+  </div>
+</div>
+
+<div class="field" id="suv-quantity-field">
+  <label for="suv-quantity">Number of SUVs</label>
+  <input id="suv-quantity" name="suvQuantity"
+         type="number" min="1" step="1" value="1" required
+         aria-describedby="vehicle-guidance">
+</div>
+
+<label class="check">
+  <input id="special-load" name="specialLoad" type="checkbox">
+  <span>
+    We need child seats or have oversized luggage,
+    such as golf bags, large strollers or other bulky items.
+  </span>
+</label>
+
+<p id="vehicle-guidance" class="muted" role="status"></p>
+
+<div id="return-trip-fields" hidden>
+  <div class="form-pair">
+    <div class="field">
+      <label for="return-date">Return date</label>
+      <input id="return-date" name="returnDate" type="date">
+    </div>
+    <div class="field">
+      <label for="return-time">Return pickup time</label>
+      <input id="return-time" name="returnTime" type="time">
+    </div>
+  </div>
+</div>
+
+<input type="hidden" name="luggage" id="luggage-summary">
+<input type="hidden" name="invoiceSummary" id="invoice-summary">
         <div class="field"><label for="name">Your name</label><input id="name" name="name" autocomplete="name" required maxlength="120"></div>
         <div class="form-pair"><div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required maxlength="160"></div><div class="field"><label for="phone">Phone with country code</label><input id="phone" name="phone" type="tel" autocomplete="tel" required maxlength="50"></div></div>
         <div class="enquiry-example"><p class="example-label">Example enquiry</p><p data-example></p><button class="text-link" type="button" data-use-example>Use this example →</button></div><div class="field"><label for="notes">Flight, return trip &amp; special requests</label><textarea id="notes" name="notes" rows="4" maxlength="1200" placeholder="Include flight numbers, return date/time and locations, or any car seats you need."></textarea></div>
         <label class="check"><input name="policies" type="checkbox" required><span>I have read the <a href="policies.html">booking policies</a> and understand this is a request, not a confirmed booking.</span></label>
-        <button class="button" type="submit">Prepare request email <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></button>
+        <div class="booking-price-panel">
+  <p class="eyebrow">Your transfer</p>
+  <p id="booking-price-line" role="status">
+    Complete your vehicle and transfer selections.
+  </p>
+  <p class="muted">
+    Prices are USD. No additional taxes or fees.
+    Vehicle availability must be confirmed.
+  </p>
+
+</div>
+
         <p id="form-note" class="muted">No payment is collected by this form. You can also call us to arrange your journey.</p><p id="form-status" role="status"></p>
-        <div id="email-fallback" hidden><label for="email-copy">Your request — copy into your email if needed</label><textarea id="email-copy" rows="8" readonly></textarea><button class="secondary-button" type="button" id="copy-request">Copy request</button></div>
         <noscript><p>Please email <a href="mailto:Precisetransfers1@gmail.com">Precisetransfers1@gmail.com</a> or call <a href="tel:+16492453134">+1 (649) 245-3134</a>. This form requires JavaScript to prepare an email.</p></noscript>
+      <button id="booking-submit" class="button" type="submit">
+  Submit
+</button>
+
+<p id="booking-status" role="status" class="muted"></p>
       </form>
+      <section id="booking-invoice" class="booking-invoice" hidden
+         aria-labelledby="quote-heading">
+
+  <p class="eyebrow">Precise Transfers</p>
+  <h3 id="quote-heading" tabindex="-1">Your transfer quote</h3>
+
+  <pre id="invoice-details"></pre>
+
+  <p class="muted">
+    Prices are USD with no additional taxes or fees.
+    Vehicle availability must be confirmed before payment.
+  </p>
+
+  <label class="check">
+    <input id="accept-quote" type="checkbox">
+    <span>
+      I have reviewed my trip details, vehicle quantity and total,
+      and accept this quote.
+    </span>
+  </label>
+
+  <div id="payment-next-step" hidden>
+    <button class="button" type="button" disabled>
+      Continue to payment
+    </button>
+
+    <p class="muted">
+      Online payment is not connected yet.
+      No payment has been taken and your booking is not confirmed.
+    </p>
+  </div>
+</section>
     </section>
 </main><footer class="site-footer container"><div><a class="brand" href="index.html"><img class="pt-mark" src="assets/images/pt-monogram.png" alt="Precise Transfers" width="80" height="80"></a><p class="footer-company">
   <span class="metal-silver">Precise</span>

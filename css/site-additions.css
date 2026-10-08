@@ -1023,3 +1023,55 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   color: #b8c9dd;
   font-size: 12px;
 }
+/* Mobile date-field sizing fix */
+@media (max-width: 760px) {
+  .quick-booking {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .quick-booking > label {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .quick-booking > label > .icon {
+    flex-shrink: 0;
+  }
+
+  .quick-booking > label > span {
+    display: block;
+    flex: 1 1 0%;
+    width: 0;
+    min-width: 0;
+  }
+
+  .quick-booking input[type="date"] {
+    -webkit-appearance: none;
+    appearance: none;
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    height: 54px;
+    min-height: 54px;
+    margin: 0;
+    padding: 13px 16px;
+    border: 1px solid #3c536e;
+    border-radius: 8px;
+    background: #080f19;
+    color: #edf3fc;
+    font-size: 16px;
+    text-align: left;
+  }
+
+  .quick-booking input[type="date"]::-webkit-date-and-time-value {
+    min-width: 0;
+    text-align: left;
+  }
+
+  .quick-booking input[type="date"]::-webkit-datetime-edit {
+    padding: 0;
+  }
+}

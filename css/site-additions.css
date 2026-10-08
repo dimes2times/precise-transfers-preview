@@ -429,3 +429,365 @@ body.has-sunset::before {
 .review-stack .review-card.is-back {
   transform: translateY(22px);
 }
+/* Reserve room inside the stack for every visible card */
+.reviews-layout,
+.reviews-layout > * {
+  min-width: 0;
+}
+
+.approved-reviews.review-stack:not(.is-static) {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  padding: 0;
+  overflow: hidden;
+  overflow-clip-margin: 0;
+  clip-path: none;
+  perspective: none;
+  overflow-anchor: none;
+}
+
+/* Small internal margins protect the card edges */
+.review-stack:not(.is-static) .review-card {
+  box-sizing: border-box;
+  inset: 12px 12px auto;
+  width: calc(100% - 24px);
+  max-width: none;
+  height: auto;
+  overflow-wrap: anywhere;
+}
+
+.review-stack .review-card blockquote {
+  max-height: none;
+  overflow: visible;
+}
+/* Custom dropdowns */
+.pt-select {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+.pt-select.is-open {
+  z-index: 50;
+}
+
+/* Keep the original select for form values and validation */
+.pt-select > select.pt-native {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  opacity: 0;
+  clip-path: inset(50%);
+  pointer-events: none;
+}
+
+.pt-select .pt-select-trigger {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 52px;
+  padding: 13px 16px;
+  border: 1px solid #3c536e;
+  border-radius: 8px;
+  background: #080f19;
+  color: #edf3fc;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color .2s ease, background .2s ease;
+}
+
+.pt-select-trigger > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.pt-select-trigger:hover,
+.pt-select.is-open .pt-select-trigger {
+  border-color: #007aff;
+  background: #0d1928;
+}
+
+.pt-select-trigger:focus-visible {
+  outline: 2px solid #007aff;
+  outline-offset: 3px;
+}
+
+.pt-select-trigger:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.pt-select-chevron {
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+  color: #68aaff;
+  transition: transform .24s ease, color .2s ease;
+}
+
+@media (hover: hover) {
+  .pt-select-trigger:hover .pt-select-chevron {
+    transform: translateY(2px);
+    color: #fff;
+  }
+}
+
+.pt-select.is-open .pt-select-chevron {
+  transform: rotate(180deg);
+}
+
+.pt-select-menu {
+  box-sizing: border-box;
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  right: 0;
+  z-index: 60;
+  display: block;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  background: #0c1725;
+  border: 1px solid #344d68;
+  border-radius: 9px;
+  box-shadow: 0 16px 32px #0006;
+  transform: translateY(-5px);
+  transition:
+    max-height .28s ease,
+    opacity .2s ease,
+    transform .28s ease,
+    visibility .28s;
+}
+
+.pt-select.is-open .pt-select-menu {
+  max-height: var(--menu-height, 280px);
+  overflow-y: auto;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #386493 #0c1725;
+}
+
+.pt-select.opens-up .pt-select-menu {
+  top: auto;
+  bottom: calc(100% + 5px);
+}
+
+.pt-select-option {
+  display: block;
+  padding: 15px 16px;
+  min-height: 48px;
+  box-sizing: border-box;
+  color: #dce8f7;
+  font-size: 14px;
+  line-height: 1.55;
+  white-space: normal;
+  cursor: pointer;
+  border-bottom: 1px solid #ffffff09;
+}
+
+.pt-select-option:last-child {
+  border-bottom: 0;
+}
+
+.pt-select-option:hover,
+.pt-select-option.is-active {
+  background: #152d48;
+}
+
+.pt-select-option[aria-selected="true"] {
+  color: #fff;
+  box-shadow: inset 3px 0 #007aff;
+}
+
+.pt-select-option[aria-disabled="true"] {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+.pt-select-error {
+  display: block;
+  color: #ffb5b5;
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+.quick-booking > label,
+.quick-booking > label > span {
+  min-width: 0;
+}
+
+.quick-booking > label > span {
+  flex: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pt-select-menu,
+  .pt-select-chevron,
+  .pt-select-trigger {
+    transition: none;
+  }
+}
+/* Stable dropdown dimensions */
+.pt-select {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.pt-select .pt-select-trigger {
+  height: 54px;
+  min-height: 54px;
+  font-size: 16px;
+  transform: none !important;
+}
+
+.pt-select-trigger > span {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Join the menu directly to the field */
+.pt-select.is-open:not(.opens-up) .pt-select-trigger {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-color: transparent;
+}
+
+.pt-select .pt-select-menu {
+  top: calc(100% - 1px);
+  left: 0;
+  right: 0;
+  margin: 0;
+  border-radius: 0 0 8px 8px;
+  border-top-color: transparent;
+  background: #0d1928;
+
+  /* Remove fading from the corners and scrollbar */
+  opacity: 1;
+  transform: none;
+  mask: none;
+  -webkit-mask: none;
+  transition:
+    max-height .24s ease,
+    visibility .24s;
+}
+
+/* A soft divider instead of a hard top border */
+.pt-select-menu::before {
+  content: "";
+  display: block;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #557da64d 25%,
+    #557da64d 75%,
+    transparent
+  );
+}
+
+.pt-select-option {
+  padding: 15px 16px;
+  font-size: 16px;
+  line-height: 1.5;
+  transform: none !important;
+}
+
+.pt-select-option[hidden] {
+  display: none !important;
+}
+
+/* Menus that need to open above the field */
+.pt-select.opens-up .pt-select-menu {
+  top: auto;
+  bottom: calc(100% - 1px);
+  border-radius: 8px 8px 0 0;
+  border-top-color: #344d68;
+  border-bottom-color: transparent;
+}
+
+.pt-select.is-open.opens-up .pt-select-trigger {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top-color: transparent;
+}
+
+/* Reduce automatic focus zoom on phones */
+@media (max-width: 760px) {
+  input,
+  select,
+  textarea,
+  .pt-select-trigger {
+    font-size: 16px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pt-select .pt-select-menu {
+    transition: none;
+  }
+}
+/* Date fields */
+input[type="date"] {
+  color-scheme: dark;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 54px;
+  padding: 13px 16px;
+  border: 1px solid #3c536e;
+  border-radius: 8px;
+  background: #080f19;
+  color: #edf3fc;
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.5;
+  accent-color: #007aff;
+  transition: border-color .2s ease, background-color .2s ease;
+}
+
+input[type="date"]:hover {
+  border-color: #007aff;
+  background: #0d1928;
+}
+
+input[type="date"]:focus-visible {
+  outline: 2px solid #007aff;
+  outline-offset: 3px;
+  border-color: #007aff;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: .85;
+  padding: 4px;
+  margin-left: 8px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  input[type="date"] {
+    transition: none;
+  }
+}

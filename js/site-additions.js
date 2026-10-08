@@ -54,8 +54,18 @@ function size() {
     return;
   }
 
-  list.style.height =
-    Math.max(...cards.map(card => card.offsetHeight)) + "px";
+  const tallestCard = Math.max(
+    0,
+    ...cards.map(card => card.offsetHeight)
+  );
+
+  // 12px above + 22px stack offset + 22px below.
+  const requiredHeight = Math.ceil(tallestCard + 56);
+  const nextHeight = `${requiredHeight}px`;
+
+  if (list.style.height !== nextHeight) {
+    list.style.height = nextHeight;
+  }
 }
 
 function paint() {
@@ -212,36 +222,48 @@ schedule();
   if(actions){actions.replaceChildren();const submit=document.createElement("button");submit.type="submit";submit.className="button";submit.textContent="Submit";actions.append(submit);}
   const note=form.querySelector(".review-note");
   if(note)note.textContent=REVIEW_ENDPOINT ? "Your review is sent privately for approval before publication." : "Opens an email draft for you to send. Reviews are approved before publication.";
+  const status=document.getElementById("review-status");
+  const reviewCopy=document.getElementById("review-copy");
+  const reviewDraft=document.getElementById("review-draft");
+  const submitButton=form.querySelector('[type="submit"]');
   let sending=false;
   form.addEventListener("submit",async event=>{
-    event.preventDefault();const name=form.elements.displayName,review=form.elements.review;
-    if(sending)return;
-    name.setCustomValidity(name.value.trim()?"":"Please enter your display name.");
-    review.setCustomValidity(review.value.trim().length>=10?"":"Please write at least 10 characters.");
+    event.preventDefault();
+    const name=form.elements.namedItem("displayName");
+    const review=form.elements.namedItem("review");
+    const rating=form.elements.namedItem("rating");
+    if(sending || !(name instanceof HTMLInputElement) || !(review instanceof HTMLTextAreaElement))return;
+    const nameValue=name.value.trim();
+    const reviewValue=review.value.trim();
+    name.setCustomValidity(nameValue?"":"Please enter your display name.");
+    review.setCustomValidity(reviewValue.length>=10?"":"Please write at least 10 characters.");
     if(!form.reportValidity())return;
-    const body=`Review for approval — Precise Transfers\n\nDisplay name: ${name.value.trim()}\nRating: ${form.elements.rating.value}/5\n\n${review.value.trim()}\n\nI consent to publication of this review and display name after approval.`;
+    const body=`Review for approval — Precise Transfers\n\nDisplay name: ${nameValue}\nRating: ${rating instanceof HTMLSelectElement ? rating.value : "0"}/5\n\n${reviewValue}\n\nI consent to publication of this review and display name after approval.`;
     if(REVIEW_ENDPOINT){
-      const status=document.getElementById("review-status");
-      const button=form.querySelector('[type="submit"]');
-      sending=true;button.disabled=true;status.textContent="Submitting your review…";
+      if(status)status.textContent="Submitting your review…";
+      if(submitButton)submitButton.disabled=true;
+      sending=true;
       try {
         const response=await fetch(REVIEW_ENDPOINT,{
           method:"POST",headers:{"Accept":"application/json"},
           body:new FormData(form)
         });
         if(!response.ok)throw new Error("Submission failed");
-        status.textContent="Your review was received for approval. It has not been published.";
-        form.reset();document.getElementById("review-copy").hidden=true;
+        if(status)status.textContent="Your review was received for approval. It has not been published.";
+        form.reset();if(reviewCopy)reviewCopy.hidden=true;
       } catch {
-        status.textContent="We could not confirm receipt. Your review has been kept below so you can copy it and email Precisetransfers1@gmail.com.";
-        document.getElementById("review-draft").value=body;document.getElementById("review-copy").hidden=false;
-      } finally {sending=false;button.disabled=false;}
+        if(status)status.textContent="We could not confirm receipt. Your review has been kept below so you can copy it and email Precisetransfers1@gmail.com.";
+        if(reviewDraft)reviewDraft.value=body;if(reviewCopy)reviewCopy.hidden=false;
+      } finally {sending=false;if(submitButton)submitButton.disabled=false;}
       return;
     }
-    document.getElementById("review-draft").value=body;document.getElementById("review-copy").hidden=false;
-    document.getElementById("review-status").textContent="Your email draft is opening. Please send it from your email app. Your review has not been posted.";
+    if(reviewDraft)reviewDraft.value=body;if(reviewCopy)reviewCopy.hidden=false;
+    if(status)status.textContent="Your email draft is opening. Please send it from your email app. Your review has not been posted.";
     const email=typeof COMPANY_EMAIL==="string"?COMPANY_EMAIL:"Precisetransfers1@gmail.com";
     location.href=`mailto:${email}?subject=${encodeURIComponent("Guest review for approval")}&body=${encodeURIComponent(body)}`;
   });
-  form.addEventListener("input",event=>event.target.setCustomValidity?.(""));
+  form.addEventListener("input",event=>{
+    const target=event.target;
+    if(target instanceof HTMLElement){target.setCustomValidity?.("");}
+  });
 })();

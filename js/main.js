@@ -205,23 +205,27 @@ function setupService(form) {
     }
   }
   function update() {
+    if (!service || !(service instanceof HTMLSelectElement)) return;
     const text = EXAMPLES[service.value] || 'Hello Precise Transfers, I would like to enquire about transportation for my stay in Turks & Caicos. Please let me know how you can help.';
     if (example) example.textContent = text;
     // Never replace text that the visitor has edited.
-    if (service.value && notes && (!notes.value.trim() || notes.value === notes.dataset.generated)) { notes.value = text; notes.dataset.generated = text; }
+    if (notes && service.value && (!notes.value.trim() || notes.value === notes.dataset.generated)) { notes.value = text; notes.dataset.generated = text; }
     if (pickup) {
       if (service.value === 'Airport arrival' && (!pickup.value.trim() || pickup.value === pickup.dataset.generated)) { pickup.value = 'PLS Airport'; pickup.dataset.generated = 'PLS Airport'; }
       else if (service.value !== 'Airport arrival' && pickup.value === pickup.dataset.generated) { pickup.value = ''; delete pickup.dataset.generated; }
     }
   }
-  service.addEventListener('change', update);
+  if (service && service instanceof HTMLSelectElement) service.addEventListener('change', update);
   form.querySelector('[data-use-example]')?.addEventListener('click', () => {
+    if (!notes || !(notes instanceof HTMLTextAreaElement)) return;
     if (notes.value.trim() && notes.value !== notes.dataset.generated) {
       const status = form.querySelector('[data-form-status], #form-status');
       if (status) status.textContent = 'Your message has been kept. Clear it first if you want to use the example instead.';
       notes.focus(); return;
     }
-    notes.value = example.textContent; notes.dataset.generated = notes.value; notes.focus();
+    const suggested = example?.textContent || '';
+    if (!suggested) return;
+    notes.value = suggested; notes.dataset.generated = notes.value; notes.focus();
   });
   update();
 }
@@ -234,6 +238,7 @@ function emailDraft(form, isBooking) {
   form.addEventListener('submit', event => {
     event.preventDefault();
     if (!form.reportValidity()) return;
+    if (!copyField || !(copyField instanceof HTMLTextAreaElement) || !fallback) return;
     const data = new FormData(form);
     const val = key => String(data.get(key) || '').trim();
     const lines = ['Hello Precise Transfers,', '', isBooking ? 'I would like to request availability and a quote:' : 'I would like to make an enquiry:', ''];
@@ -245,14 +250,16 @@ function emailDraft(form, isBooking) {
     if (isBooking) lines.push('', 'I have read the booking policies and understand this is a request, not a confirmed booking.');
     copyField.value = lines.join('\n');
     fallback.hidden = false;
-    status.textContent = `Your draft is ready. Review and send it in your email app, or copy it below and email ${COMPANY_EMAIL}. This website has not sent a message or confirmed a booking.`;
+    if (status) status.textContent = `Your draft is ready. Review and send it in your email app, or copy it below and email ${COMPANY_EMAIL}. This website has not sent a message or confirmed a booking.`;
     const subject = (isBooking ? 'Transfer request' : 'Website enquiry') + (val('service') ? ' — ' + val('service') : '');
     window.location.href = `mailto:${COMPANY_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(copyField.value)}`;
   });
-  copyButton.addEventListener('click', async () => {
-    try { await navigator.clipboard.writeText(copyField.value); status.textContent = `Copied. Paste into an email to ${COMPANY_EMAIL} and send it.`; }
-    catch { copyField.focus(); copyField.select(); status.textContent = 'Draft selected. Use your device’s Copy action, then paste into your email.'; }
-  });
+  if (copyButton && copyField && status) {
+    copyButton.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(copyField.value); status.textContent = `Copied. Paste into an email to ${COMPANY_EMAIL} and send it.`; }
+      catch { copyField.focus(); copyField.select(); status.textContent = 'Draft selected. Use your device’s Copy action, then paste into your email.'; }
+    });
+  }
 }
 
 for (const form of document.querySelectorAll('#request-form, #contact-form')) {

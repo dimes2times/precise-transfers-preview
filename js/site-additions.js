@@ -126,17 +126,31 @@ async function flip() {
       let frames;
 
       if (position === 0) {
-        /* Front card flips upward. */
-        frames = [
-          {
-            transform: "translateY(0) rotateX(0deg)",
-            opacity: 1
-          },
-          {
-            transform: "translateY(-28px) rotateX(88deg)",
-            opacity: 0
-          }
-        ];
+  const onPhone = window.matchMedia(
+    "(max-width: 760px)"
+  ).matches;
+
+  frames = onPhone
+    ? [
+        {
+          transform: "translateY(0)",
+          opacity: 1
+        },
+        {
+          transform: "translateY(-105%)",
+          opacity: 0
+        }
+      ]
+    : [
+        {
+          transform: "translateY(0) rotateX(0deg)",
+          opacity: 1
+        },
+        {
+          transform: "translateY(-28px) rotateX(88deg)",
+          opacity: 0
+        }
+      ];
       } else if (position === 1) {
         /* Next card rises while the front card flips. */
         frames = [

@@ -302,9 +302,9 @@ body.has-sunset::before {
 
   /* Show the white artwork; hide the black background. */
   -webkit-mask-image:
-    url("../assets/images/stellar-works-original.png");
+    url("../assets/images/stellar-star.png");
   mask-image:
-    url("../assets/images/stellar-works-original.png");
+    url("../assets/images/stellar-star.png");
 
   mask-mode: luminance;
 
@@ -317,4 +317,85 @@ body.has-sunset::before {
 
   -webkit-mask-position: center 44%;
   mask-position: center 44%;
+}
+/* Mobile navigation — desktop stays unchanged */
+@media (max-width: 760px) {
+  #site-nav,
+  .has-menu #site-nav.is-open {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  #site-nav > a {
+    text-align: center;
+    justify-content: center;
+  }
+
+  .site-footer nav {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* Keep animated reviews from moving the page */
+  .reviews-layout,
+  .reviews-layout > * {
+    min-width: 0;
+  }
+
+  .approved-reviews.review-stack:not(.is-static) {
+    perspective: none;
+    overflow: clip;
+    overflow-anchor: none;
+    isolation: isolate;
+  }
+
+  .review-stack .review-card {
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Footer agency credit */
+.agency-credit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+  font: inherit;
+  color: inherit;
+}
+
+.stellar-credit-mark {
+  display: inline-block;
+  flex: 0 0 26px;
+  width: 26px;
+  height: 26px;
+  background: currentColor;
+
+  -webkit-mask-image: url("../assets/images/stellar-star.png");
+  mask-image: url("../assets/images/stellar-star.png");
+  mask-mode: luminance;
+
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+.agency-credit .stellar-star-inline {
+  display: inline-block;
+  flex: 0 0 28px;
+  width: 28px;
+  height: 30px;
+  color: #eef3fa;
+  vertical-align: middle;
+  overflow: visible;
+  background: transparent;
+  -webkit-mask: none;
+  mask: none;
 }

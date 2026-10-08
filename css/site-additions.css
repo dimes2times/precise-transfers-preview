@@ -399,3 +399,33 @@ body.has-sunset::before {
   -webkit-mask: none;
   mask: none;
 }
+/* Continuous upward review stack on every screen */
+.approved-reviews.review-stack:not(.is-static) {
+  perspective: none;
+  overflow: clip;
+  overflow-clip-margin: 28px;
+  clip-path: inset(0 -28px -28px);
+  overflow-anchor: none;
+  isolation: isolate;
+  margin-bottom: 36px;
+}
+
+.review-stack:not(.is-static) .review-card {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  transform-origin: center;
+  transition: none !important;
+}
+
+.review-stack .review-card.is-front {
+  transform: translateY(0);
+}
+
+.review-stack .review-card.is-next {
+  transform: translateY(11px);
+}
+
+.review-stack .review-card.is-back {
+  transform: translateY(22px);
+}

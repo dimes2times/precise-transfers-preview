@@ -102,85 +102,72 @@ async function flip() {
     motion.matches ||
     document.hidden ||
     cards.length < 2
-  ) {
-    return;
-  }
+  ) return;
 
   busy = true;
   clearTimeout(timer);
 
   const animations = [];
+  let outgoing;
+
   const options = {
-    duration: 550,
+    duration: 650,
     easing: "cubic-bezier(.22, .61, .36, 1)",
-    fill: "forwards"
+    fill: "both"
   };
 
   try {
+    // A temporary visual copy slides away while the real
+    // cards move into their next positions underneath.
+    outgoing = cards[current].cloneNode(true);
+    outgoing.setAttribute("aria-hidden", "true");
+    outgoing.inert = true;
+    outgoing.style.zIndex = "4";
+    outgoing.style.pointerEvents = "none";
+    list.append(outgoing);
+
+    // Recycle immediately, including last review → first.
+    current = (current + 1) % cards.length;
+    paint();
+
+    animations.push(
+      outgoing.animate(
+        [
+          { transform: "translateY(0)", opacity: 1 },
+          { transform: "translateY(-105%)", opacity: 0 }
+        ],
+        options
+      )
+    );
+
     cards.forEach((card, index) => {
       const position =
         (index - current + cards.length) % cards.length;
 
-      if (position > 2 || !card.animate) return;
+      if (position > 2) return;
 
-      let frames;
+      const endY = position * 11;
+      const endOpacity = [1, 0.8, 0.45][position];
+      const startsAtBottom =
+        position === Math.min(2, cards.length - 1);
 
-      if (position === 0) {
-  const onPhone = window.matchMedia(
-    "(max-width: 760px)"
-  ).matches;
-
-  frames = onPhone
-    ? [
-        {
-          transform: "translateY(0)",
-          opacity: 1
-        },
-        {
-          transform: "translateY(-105%)",
-          opacity: 0
-        }
-      ]
-    : [
-        {
-          transform: "translateY(0) rotateX(0deg)",
-          opacity: 1
-        },
-        {
-          transform: "translateY(-28px) rotateX(88deg)",
-          opacity: 0
-        }
-      ];
-      } else if (position === 1) {
-        /* Next card rises while the front card flips. */
-        frames = [
-          {
-            transform: "translateY(11px)",
-            opacity: .8
-          },
-          {
-            transform: "translateY(0)",
-            opacity: 1
-          }
-        ];
-      } else {
-        /* Bottom card moves forward simultaneously. */
-        frames = [
-          {
-            transform: "translateY(22px)",
-            opacity: .45
-          },
-          {
-            transform: "translateY(11px)",
-            opacity: .8
-          }
-        ];
-      }
-
-      animations.push(card.animate(frames, options));
+      animations.push(
+        card.animate(
+          [
+            {
+              transform: `translateY(${endY + 11}px)`,
+              opacity: startsAtBottom ? 0 : endOpacity - 0.2
+            },
+            {
+              transform: `translateY(${endY}px)`,
+              opacity: endOpacity
+            }
+          ],
+          options
+        )
+      );
     });
 
-    /* Keeps your existing reduced-motion cancellation working. */
     activeAnimation = {
       cancel() {
         animations.forEach(animation => animation.cancel());
@@ -190,18 +177,14 @@ async function flip() {
     await Promise.all(
       animations.map(animation => animation.finished)
     );
-
-    /* Loops from the last review back to the first. */
-    current = (current + 1) % cards.length;
   } catch {
-    /* Safely handle animation cancellation. */
+    // Reduced-motion changes can safely cancel a transition.
   } finally {
-    /* Set final positions before removing animation styles. */
-    paint();
+    outgoing?.remove();
     animations.forEach(animation => animation.cancel());
-
     activeAnimation = null;
     busy = false;
+    paint();
     schedule();
   }
 }
